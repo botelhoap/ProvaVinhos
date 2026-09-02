@@ -3,7 +3,10 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <meta name="description" content="Classificação dos provadores da Prova de Vinhos.">
+  <meta
+    name="description"
+    content="Classificação dos provadores da Prova de Vinhos."
+  >
   <title>Prova de Vinhos | Provadores</title>
   <link rel="stylesheet" href="style.css">
 </head>
@@ -12,13 +15,14 @@
   <header>
     <div class="headerInner">
       <h1>Prova de Vinhos</h1>
-      <p>Classificação e precisão dos provadores</p>
+      <p>Classificação dos Provadores</p>
     </div>
   </header>
 
   <nav aria-label="Navegação principal">
     <div class="navInner">
-      <a href="index.html">Vinhos</a>
+      <a href="index.html">Teaser</a>
+      <a href="vinhos.html">Vinhos</a>
       <a class="active" href="provadores.html">Provadores</a>
       <a href="resultados.html">Resultados Finais</a>
     </div>
@@ -27,32 +31,21 @@
   <main>
     <h2 class="sectionTitle">Classificação dos Provadores</h2>
 
-    <section class="stats" aria-label="Estatísticas dos provadores">
-      <article class="stat">
-        <div class="statLabel">Total de Provadores</div>
-        <div id="stat-total" class="statValue">—</div>
-      </article>
-
-      <article class="stat">
-        <div class="statLabel">Média de Pontos</div>
-        <div id="stat-media" class="statValue">—</div>
-      </article>
-
-      <article class="stat">
-        <div class="statLabel">Pontuação Máxima</div>
-        <div id="stat-max" class="statValue">—</div>
-      </article>
+    <section id="estatisticas" class="stats" aria-label="Resumo da classificação">
+      <div class="stat">
+        <div class="statLabel">A carregar provadores</div>
+        <div class="statValue">—</div>
+      </div>
     </section>
 
     <section id="podio-provadores" class="podium" aria-label="Pódio dos provadores">
       <div class="loading">A carregar pódio...</div>
     </section>
 
-    <section class="card">
-      <h3 class="chartTitle">Pontuação Total por Provador</h3>
-
-      <div id="grafico-barras" class="barChart">
-        <div class="loading">A carregar classificação...</div>
+    <section class="card topSpacing" aria-labelledby="titulo-grafico">
+      <h3 id="titulo-grafico" class="chartTitle">Pontuação por provador</h3>
+      <div id="grafico-provadores" class="barChart">
+        <div class="loading">A carregar gráfico...</div>
       </div>
     </section>
 
@@ -60,16 +53,19 @@
       <table class="provadoresTable">
         <thead>
           <tr>
-            <th>Pos.</th>
+            <th style="width: 70px;">Pos.</th>
             <th>Provador</th>
-            <th>Pontos Região</th>
-            <th>Pontos Preço</th>
-            <th>Total</th>
+            <th style="width: 120px; text-align: right;">Região</th>
+            <th style="width: 120px; text-align: right;">Preço</th>
+            <th style="width: 110px; text-align: right;">Total</th>
           </tr>
         </thead>
+
         <tbody id="tabela-provadores">
           <tr>
-            <td colspan="5" class="loading">A carregar dados...</td>
+            <td colspan="5" class="loading">
+              A carregar classificação do Google Sheets...
+            </td>
           </tr>
         </tbody>
       </table>
@@ -85,96 +81,118 @@
   <script src="dados.js"></script>
 
   <script>
-    function ordenarProvadores(provadores) {
-      return [...provadores].sort((a, b) => {
-        if (b.total !== a.total) {
-          return b.total - a.total;
+    function medalha(indice) {
+      return ["🥇", "🥈", "🥉"][indice] || "🍷";
+    }
+
+    function ordenarProvadores(lista) {
+      return [...lista].sort((a, b) => {
+        const diferencaTotal = b.total - a.total;
+
+        if (diferencaTotal !== 0) {
+          return diferencaTotal;
         }
 
-        if (b.regioes !== a.regioes) {
-          return b.regioes - a.regioes;
+        const diferencaRegioes = b.regioes - a.regioes;
+
+        if (diferencaRegioes !== 0) {
+          return diferencaRegioes;
         }
 
-        if (b.precos !== a.precos) {
-          return b.precos - a.precos;
+        const diferencaPrecos = b.precos - a.precos;
+
+        if (diferencaPrecos !== 0) {
+          return diferencaPrecos;
         }
 
         return a.nome.localeCompare(b.nome, "pt-PT");
       });
     }
 
-    function medalha(posicao) {
-      const medalhas = ["🥇", "🥈", "🥉"];
-      return medalhas[posicao] || "🍷";
+    function renderizarEstatisticas(provadores) {
+      const contentor = document.getElementById("estatisticas");
+      const vencedor = provadores[0];
+      const maiorPontuacao = vencedor ? vencedor.total : 0;
+
+      contentor.innerHTML = `
+        <div class="stat">
+          <div class="statLabel">Participantes</div>
+          <div class="statValue">${provadores.length}</div>
+        </div>
+
+        <div class="stat">
+          <div class="statLabel">Melhor pontuação</div>
+          <div class="statValue">${formatPoints(maiorPontuacao)}</div>
+        </div>
+
+        <div class="stat">
+          <div class="statLabel">Líder atual</div>
+          <div class="statValue">
+            ${vencedor ? escapeHtml(vencedor.nome) : "—"}
+          </div>
+        </div>
+      `;
     }
 
-    function renderPodio(provadores) {
-      const podio = document.getElementById("podio-provadores");
+    function renderizarPodio(provadores) {
+      const contentor = document.getElementById("podio-provadores");
 
       if (provadores.length === 0) {
-        podio.innerHTML = `
-          <div class="error">
-            Não existem provadores para apresentar.
-          </div>
+        contentor.innerHTML = `
+          <div class="loading">Ainda não existem resultados de provadores.</div>
         `;
         return;
       }
 
-      podio.innerHTML = provadores
+      contentor.innerHTML = provadores
         .slice(0, 3)
-        .map((provador, indice) => `
-          <article class="podiumCard">
-            <div class="medal">${medalha(indice)}</div>
-            <div class="podiumPosition">${indice + 1}.º lugar</div>
-            <h3 class="podiumName">${escapeHtml(provador.nome)}</h3>
-            <div class="score">${formatPoints(provador.total)} pts</div>
-            <p class="podiumInfo">
-              Região: ${formatPoints(provador.regioes)} ·
-              Preço: ${formatPoints(provador.precos)}
-            </p>
-          </article>
-        `)
+        .map((provador, indice) => {
+          const classeSegundo = indice === 1 ? " second" : "";
+
+          return `
+            <article class="podiumCard${classeSegundo}">
+              <div class="medal">${medalha(indice)}</div>
+              <div class="podiumPosition">${indice + 1}.º lugar</div>
+              <h3>${escapeHtml(provador.nome)}</h3>
+              <div class="score">${formatPoints(provador.total)} pts</div>
+              <p class="podiumInfo">
+                Região: ${formatPoints(provador.regioes)} ·
+                Preço: ${formatPoints(provador.precos)}
+              </p>
+            </article>
+          `;
+        })
         .join("");
     }
 
-    function renderTabela(provadores) {
-      const tabela = document.getElementById("tabela-provadores");
+    function renderizarGrafico(provadores) {
+      const contentor = document.getElementById("grafico-provadores");
+      const maximo = Math.max(...provadores.map((provador) => provador.total), 1);
 
-      tabela.innerHTML = provadores
-        .map((provador, indice) => `
-          <tr>
-            <td class="rank">${indice + 1}.º</td>
-            <td><strong>${escapeHtml(provador.nome)}</strong></td>
-            <td>${formatPoints(provador.regioes)}</td>
-            <td>${formatPoints(provador.precos)}</td>
-            <td class="points">${formatPoints(provador.total)}</td>
-          </tr>
-        `)
-        .join("");
-    }
-
-    function renderGrafico(provadores) {
-      const contentor = document.getElementById("grafico-barras");
-      const maximo = provadores.length > 0 ? provadores[0].total : 0;
+      if (provadores.length === 0) {
+        contentor.innerHTML = `
+          <div class="loading">Ainda não existem dados para o gráfico.</div>
+        `;
+        return;
+      }
 
       contentor.innerHTML = provadores
         .map((provador) => {
-          const percentagem = maximo > 0
-            ? Math.min((provador.total / maximo) * 100, 100)
-            : 0;
+          const percentagem = Math.max(
+            0,
+            Math.min(100, (provador.total / maximo) * 100)
+          );
 
           return `
             <div class="barRow">
-              <div class="barLabel">${escapeHtml(provador.nome)}</div>
-              <div
-                class="barTrack"
-                aria-label="${escapeHtml(provador.nome)}: ${formatPoints(provador.total)} pontos"
-              >
-                <div
-                  class="barFill"
-                  style="width: ${percentagem.toFixed(2)}%"
-                ></div>
+              <div class="barLabel" title="${escapeHtml(provador.nome)}">
+                ${escapeHtml(provador.nome)}
               </div>
+
+              <div class="barTrack" aria-label="${escapeHtml(provador.nome)}: ${formatPoints(provador.total)} pontos">
+                <div class="barFill" style="width: ${percentagem}%"></div>
+              </div>
+
               <div class="barValue">${formatPoints(provador.total)}</div>
             </div>
           `;
@@ -182,54 +200,83 @@
         .join("");
     }
 
-    async function inicializarProvadores() {
+    function renderizarTabela(provadores) {
+      const contentor = document.getElementById("tabela-provadores");
+
+      if (provadores.length === 0) {
+        contentor.innerHTML = `
+          <tr>
+            <td colspan="5" class="loading">Ainda não existem provadores.</td>
+          </tr>
+        `;
+        return;
+      }
+
+      contentor.innerHTML = provadores
+        .map((provador, indice) => {
+          const posicao = indice < 3
+            ? `${medalha(indice)} ${indice + 1}.º`
+            : `${indice + 1}.º`;
+
+          return `
+            <tr>
+              <td class="rank">${posicao}</td>
+              <td><strong>${escapeHtml(provador.nome)}</strong></td>
+              <td class="points" style="text-align: right;">
+                ${formatPoints(provador.regioes)}
+              </td>
+              <td class="points" style="text-align: right;">
+                ${formatPoints(provador.precos)}
+              </td>
+              <td class="points" style="text-align: right;">
+                ${formatPoints(provador.total)}
+              </td>
+            </tr>
+          `;
+        })
+        .join("");
+    }
+
+    async function inicializar() {
       try {
-        const dados = await getSheetData();
-        const provadores = ordenarProvadores(dados.provadores);
+        const listas = await getSheetData();
 
-        if (provadores.length === 0) {
-          throw new Error("Não foram encontrados provadores na folha Vencedores.");
-        }
+        const provadores = ordenarProvadores(
+          listas.provadores.map((provador) => ({
+            nome: provador.nome,
+            regioes: numberValue(provador.regioes),
+            precos: numberValue(provador.precos),
+            total: numberValue(provador.total)
+          }))
+        );
 
-        const somaTotal = provadores.reduce((acumulado, provador) => {
-          return acumulado + provador.total;
-        }, 0);
-
-        document.getElementById("stat-total").textContent = provadores.length;
-        document.getElementById("stat-media").textContent =
-          formatPoints(somaTotal / provadores.length);
-        document.getElementById("stat-max").textContent =
-          formatPoints(provadores[0].total);
-
-        renderPodio(provadores);
-        renderGrafico(provadores);
-        renderTabela(provadores);
+        renderizarEstatisticas(provadores);
+        renderizarPodio(provadores);
+        renderizarGrafico(provadores);
+        renderizarTabela(provadores);
       } catch (erro) {
         console.error(erro);
 
-        document.getElementById("podio-provadores").innerHTML = `
+        const mensagem = `
           <div class="error">
-            Erro ao carregar o pódio: ${escapeHtml(erro.message)}
+            Não foi possível carregar a classificação dos provadores.
           </div>
         `;
 
-        document.getElementById("grafico-barras").innerHTML = `
-          <div class="error">
-            Erro ao carregar os provadores: ${escapeHtml(erro.message)}
-          </div>
-        `;
-
+        document.getElementById("estatisticas").innerHTML = mensagem;
+        document.getElementById("podio-provadores").innerHTML = mensagem;
+        document.getElementById("grafico-provadores").innerHTML = mensagem;
         document.getElementById("tabela-provadores").innerHTML = `
           <tr>
             <td colspan="5" class="error">
-              Verifica a publicação da Google Sheet e volta a tentar.
+              Não foi possível carregar os dados.
             </td>
           </tr>
         `;
       }
     }
 
-    window.addEventListener("DOMContentLoaded", inicializarProvadores);
+    window.addEventListener("DOMContentLoaded", inicializar);
   </script>
 </body>
 </html>
