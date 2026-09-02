@@ -218,54 +218,69 @@
       text-align: center;
     }
 
-    @media (max-width: 720px) {
-      header {
-        align-items: flex-start;
-        min-height: 155px;
-        padding: 16px 16px 14px;
-        background-position: center 35%;
-      }
+@media (max-width: 720px) {
+  header {
+    align-items: flex-start;
+    min-height: 155px;
+    padding: 12px 16px;
+    background-position: center 25%;
+    background-size: cover;
+  }
 
-      header h1 {
-        font-size: clamp(21px, 6.5vw, 28px);
-        line-height: 1.05;
-      }
+  .headerInner {
+    text-align: right;
+  }
 
-      header p {
-        margin-top: 4px;
-        font-size: 11px;
-      }
+  header h1 {
+    font-size: clamp(20px, 6vw, 26px);
+    line-height: 1.05;
+  }
 
-      main {
-        padding: 28px 14px 40px;
-      }
+  header p {
+    margin-top: 3px;
+    font-size: 10px;
+    line-height: 1.2;
+  }
 
-      .intro {
-        margin-bottom: 28px;
-      }
+  .navInner {
+    padding: 8px 14px;
+  }
 
-      .intro p:last-child {
-        font-size: 14px;
-      }
+  nav a {
+    padding: 9px 12px;
+    font-size: 13px;
+  }
 
-      .section {
-        margin-top: 32px;
-      }
+  main {
+    padding: 28px 14px 40px;
+  }
 
-      .podium {
-        grid-template-columns: 1fr;
-      }
+  .intro {
+    margin-bottom: 28px;
+  }
 
-      .podiumCard,
-      .podiumCard.second {
-        min-height: auto;
-        transform: none;
-      }
+  .intro p:last-child {
+    font-size: 14px;
+  }
 
-      .podiumCard h3 {
-        min-height: auto;
-      }
-    }
+  .section {
+    margin-top: 32px;
+  }
+
+  .podium {
+    grid-template-columns: 1fr;
+  }
+
+  .podiumCard,
+  .podiumCard.second {
+    min-height: auto;
+    transform: none;
+  }
+
+  .podiumCard h3 {
+    min-height: auto;
+  }
+}
   </style>
 </head>
 
