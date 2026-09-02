@@ -59,7 +59,8 @@
 
     .headerInner,
     main,
-    footer {
+    footer,
+    .navInner {
       width: min(1120px, 100%);
       margin: 0 auto;
     }
@@ -83,6 +84,34 @@
       color: #ffffff;
       font-size: 16px;
       text-shadow: 0 2px 12px rgba(0, 0, 0, 0.78);
+    }
+
+    nav {
+      border-bottom: 1px solid var(--line);
+      background: #ffffff;
+      box-shadow: 0 1px 8px rgba(32, 37, 31, 0.06);
+    }
+
+    .navInner {
+      display: flex;
+      gap: 6px;
+      padding: 10px 20px;
+    }
+
+    nav a {
+      padding: 10px 14px;
+      border-radius: 7px;
+      color: var(--ink);
+      font-size: 14px;
+      font-weight: 700;
+      text-decoration: none;
+      transition: background-color 0.2s ease, color 0.2s ease;
+    }
+
+    nav a:hover,
+    nav a.active {
+      background: var(--wine);
+      color: #ffffff;
     }
 
     main {
@@ -246,10 +275,10 @@
 
     @media (max-width: 720px) {
       header {
-        align-items: flex-end;
-        min-height: 165px;
+        align-items: flex-start;
+        min-height: 155px;
         padding: 16px 16px 14px;
-        background-position: center 35%;
+        background-position: center 25%;
       }
 
       header h1 {
@@ -260,6 +289,15 @@
       header p {
         margin-top: 4px;
         font-size: 11px;
+      }
+
+      .navInner {
+        padding: 8px 14px;
+      }
+
+      nav a {
+        padding: 9px 12px;
+        font-size: 13px;
       }
 
       main {
@@ -302,6 +340,14 @@
       <p>5.ª Edição do Team Building</p>
     </div>
   </header>
+
+  <nav aria-label="Navegação principal">
+    <div class="navInner">
+      <a href="index.html">Vinhos</a>
+      <a href="provadores.html">Provadores</a>
+      <a class="active" href="resultados.html">Resultados Finais</a>
+    </div>
+  </nav>
 
   <main>
     <section class="intro">
@@ -377,7 +423,9 @@
           <div class="position">${indice + 1}.º lugar</div>
           <h3>${escapeHtml(vinho.nome)}</h3>
           <div class="score">${formatPoints(vinho.pontos)} pts</div>
-          <p class="podiumInfo">${escapeHtml(vinho.regiao)} · ${escapeHtml(vinho.tipo)}</p>
+          <p class="podiumInfo">
+            ${escapeHtml(vinho.regiao)} · ${escapeHtml(vinho.tipo)}
+          </p>
         </article>
       `;
     }
