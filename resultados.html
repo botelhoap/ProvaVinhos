@@ -273,63 +273,69 @@
       text-align: center;
     }
 
-    @media (max-width: 720px) {
-      header {
-        align-items: flex-start;
-        min-height: 155px;
-        padding: 16px 16px 14px;
-        background-position: center 25%;
-      }
+@media (max-width: 720px) {
+  header {
+    align-items: flex-start;
+    min-height: 155px;
+    padding: 12px 16px;
+    background-position: center 25%;
+    background-size: cover;
+  }
 
-      header h1 {
-        font-size: clamp(21px, 6.5vw, 28px);
-        line-height: 1.05;
-      }
+  .headerInner {
+    text-align: right;
+  }
 
-      header p {
-        margin-top: 4px;
-        font-size: 11px;
-      }
+  header h1 {
+    font-size: clamp(20px, 6vw, 26px);
+    line-height: 1.05;
+  }
 
-      .navInner {
-        padding: 8px 14px;
-      }
+  header p {
+    margin-top: 3px;
+    font-size: 10px;
+    line-height: 1.2;
+  }
 
-      nav a {
-        padding: 9px 12px;
-        font-size: 13px;
-      }
+  .navInner {
+    padding: 8px 14px;
+  }
 
-      main {
-        padding: 28px 14px 40px;
-      }
+  nav a {
+    padding: 9px 12px;
+    font-size: 13px;
+  }
 
-      .intro {
-        margin-bottom: 28px;
-      }
+  main {
+    padding: 28px 14px 40px;
+  }
 
-      .intro p:last-child {
-        font-size: 14px;
-      }
+  .intro {
+    margin-bottom: 28px;
+  }
 
-      .section {
-        margin-top: 32px;
-      }
+  .intro p:last-child {
+    font-size: 14px;
+  }
 
-      .podium {
-        grid-template-columns: 1fr;
-      }
+  .section {
+    margin-top: 32px;
+  }
 
-      .podiumCard,
-      .podiumCard.second {
-        min-height: auto;
-        transform: none;
-      }
+  .podium {
+    grid-template-columns: 1fr;
+  }
 
-      .podiumCard h3 {
-        min-height: auto;
-      }
-    }
+  .podiumCard,
+  .podiumCard.second {
+    min-height: auto;
+    transform: none;
+  }
+
+  .podiumCard h3 {
+    min-height: auto;
+  }
+}
   </style>
 </head>
 
