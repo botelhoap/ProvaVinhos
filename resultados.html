@@ -8,335 +8,7 @@
     content="Resultados finais da Prova de Vinhos."
   >
   <title>Prova de Vinhos | Resultados Finais</title>
-
-  <style>
-    :root {
-      --bg: #f4f1ea;
-      --card: #fffdf8;
-      --ink: #20251f;
-      --muted: #6e756c;
-      --wine: #6f1d35;
-      --wine-hover: #8f2948;
-      --gold: #d0aa59;
-      --line: #ddd7cc;
-      --green: #315c49;
-      --danger: #8b1e2d;
-    }
-
-    * {
-      box-sizing: border-box;
-    }
-
-    html {
-      scroll-behavior: smooth;
-    }
-
-    body {
-      margin: 0;
-      background: var(--bg);
-      color: var(--ink);
-      font-family: Arial, Helvetica, sans-serif;
-    }
-
-    header {
-      display: flex;
-      align-items: flex-start;
-      min-height: 280px;
-      padding: 22px 20px 34px;
-      background-color: var(--wine);
-      background-image:
-        linear-gradient(
-          90deg,
-          rgba(43, 7, 17, 0.66) 0%,
-          rgba(66, 11, 26, 0.42) 48%,
-          rgba(48, 7, 16, 0.24) 100%
-        ),
-        url("assets/images/5_edicao_Cabecalho.png");
-      background-position: center 35%;
-      background-repeat: no-repeat;
-      background-size: cover;
-    }
-
-    .headerInner,
-    main,
-    footer,
-    .navInner {
-      width: min(1120px, 100%);
-      margin: 0 auto;
-    }
-
-    .headerInner {
-      text-align: center;
-    }
-
-    header h1 {
-      margin: 0;
-      color: #ffffff;
-      font-family: Georgia, "Times New Roman", serif;
-      font-size: clamp(32px, 5vw, 54px);
-      font-weight: 700;
-      line-height: 1.08;
-      text-shadow: 0 2px 12px rgba(0, 0, 0, 0.78);
-    }
-
-    header p {
-      margin: 10px 0 0;
-      color: #ffffff;
-      font-size: 16px;
-      text-shadow: 0 2px 12px rgba(0, 0, 0, 0.78);
-    }
-
-    nav {
-      border-bottom: 1px solid var(--line);
-      background: #ffffff;
-      box-shadow: 0 1px 8px rgba(32, 37, 31, 0.06);
-    }
-
-    .navInner {
-      display: flex;
-      gap: 6px;
-      padding: 10px 20px;
-    }
-
-    nav a {
-      padding: 10px 14px;
-      border-radius: 7px;
-      color: var(--ink);
-      font-size: 14px;
-      font-weight: 700;
-      text-decoration: none;
-      transition: background-color 0.2s ease, color 0.2s ease;
-    }
-
-    nav a:hover,
-    nav a.active {
-      background: var(--wine);
-      color: #ffffff;
-    }
-
-    main {
-      padding: 38px 20px 50px;
-    }
-
-    .intro {
-      max-width: 760px;
-      margin: 0 auto 38px;
-      text-align: center;
-    }
-
-    .eyebrow {
-      margin: 0 0 8px;
-      color: var(--wine);
-      font-size: 13px;
-      font-weight: 800;
-      letter-spacing: 0.08em;
-      text-transform: uppercase;
-    }
-
-    .intro h2 {
-      margin: 0;
-      font-family: Georgia, "Times New Roman", serif;
-      font-size: clamp(28px, 5vw, 44px);
-      line-height: 1.12;
-    }
-
-    .intro p:last-child {
-      margin: 12px 0 0;
-      color: var(--muted);
-      font-size: 16px;
-      line-height: 1.5;
-    }
-
-    .section {
-      margin-top: 42px;
-    }
-
-    .sectionTitle {
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      gap: 10px;
-      margin: 0 0 18px;
-      color: var(--wine);
-      font-family: Georgia, "Times New Roman", serif;
-      font-size: clamp(23px, 4vw, 31px);
-      text-align: center;
-    }
-
-    .sectionTitle::before,
-    .sectionTitle::after {
-      width: min(16vw, 120px);
-      height: 1px;
-      background: var(--gold);
-      content: "";
-    }
-
-    .podium {
-      display: grid;
-      grid-template-columns: repeat(3, 1fr);
-      gap: 14px;
-    }
-
-    .podiumCard {
-      position: relative;
-      min-height: 220px;
-      overflow: hidden;
-      padding: 22px 18px;
-      border: 1px solid var(--line);
-      border-radius: 12px;
-      background: var(--card);
-      box-shadow: 0 4px 14px rgba(32, 37, 31, 0.06);
-      text-align: center;
-    }
-
-    .podiumCard.second {
-      border-color: var(--gold);
-      box-shadow: 0 8px 22px rgba(176, 138, 62, 0.18);
-      transform: translateY(-8px);
-    }
-
-    .medal {
-      font-size: 34px;
-      line-height: 1;
-    }
-
-    .position {
-      margin-top: 9px;
-      color: var(--gold);
-      font-size: 12px;
-      font-weight: 800;
-      letter-spacing: 0.06em;
-      text-transform: uppercase;
-    }
-
-    .podiumCard h3 {
-      min-height: 52px;
-      margin: 9px 0;
-      font-family: Georgia, "Times New Roman", serif;
-      font-size: 20px;
-      line-height: 1.25;
-    }
-
-    .score {
-      color: var(--wine);
-      font-size: 28px;
-      font-weight: 800;
-    }
-
-    .podiumInfo {
-      margin: 8px 0 0;
-      color: var(--muted);
-      font-size: 13px;
-      line-height: 1.4;
-    }
-
-    .loading,
-    .error {
-      grid-column: 1 / -1;
-      padding: 22px;
-      border: 1px solid var(--line);
-      border-radius: 12px;
-      background: var(--card);
-      text-align: center;
-    }
-
-    .error {
-      color: var(--danger);
-    }
-
-    .notice {
-      margin: 42px auto 0;
-      padding: 22px;
-      border: 1px solid var(--gold);
-      border-radius: 12px;
-      background: rgba(255, 253, 248, 0.75);
-      text-align: center;
-    }
-
-    .notice strong {
-      display: block;
-      color: var(--wine);
-      font-family: Georgia, "Times New Roman", serif;
-      font-size: 22px;
-    }
-
-    .notice p {
-      margin: 8px 0 0;
-      color: var(--muted);
-      font-size: 14px;
-    }
-
-    footer {
-      padding: 0 20px 30px;
-      color: var(--muted);
-      font-size: 12px;
-      text-align: center;
-    }
-
-@media (max-width: 720px) {
-  header {
-    align-items: flex-start;
-    min-height: 150px;
-    padding: 12px 16px;
-    background-position: center 25%;
-    background-size: cover;
-  }
-
-  .headerInner {
-    text-align: right;
-  }
-
-  header h1 {
-    font-size: clamp(20px, 6vw, 26px);
-    line-height: 1.05;
-  }
-
-  header p {
-    margin-top: 3px;
-    font-size: 11px;
-    line-height: 1.2;
-  }
-
-  .navInner {
-    padding: 8px 14px;
-  }
-
-  nav a {
-    padding: 9px 12px;
-    font-size: 13px;
-  }
-
-  main {
-    padding: 28px 14px 40px;
-  }
-
-  .intro {
-    margin-bottom: 28px;
-  }
-
-  .intro p:last-child {
-    font-size: 14px;
-  }
-
-  .section {
-    margin-top: 32px;
-  }
-
-  .podium {
-    grid-template-columns: 1fr;
-  }
-
-  .podiumCard,
-  .podiumCard.second {
-    min-height: auto;
-    transform: none;
-  }
-
-  .podiumCard h3 {
-    min-height: auto;
-  }
-}
-  </style>
+  <link rel="stylesheet" href="style.css">
 </head>
 
 <body>
@@ -349,7 +21,8 @@
 
   <nav aria-label="Navegação principal">
     <div class="navInner">
-      <a href="index.html">Vinhos</a>
+      <a href="index.html">Teaser</a>
+      <a href="vinhos.html">Vinhos</a>
       <a href="provadores.html">Provadores</a>
       <a class="active" href="resultados.html">Resultados Finais</a>
     </div>
@@ -366,7 +39,9 @@
     </section>
 
     <section class="section" aria-labelledby="titulo-brancos">
-      <h2 id="titulo-brancos" class="sectionTitle">Pódio dos Brancos</h2>
+      <h2 id="titulo-brancos" class="sectionTitle centered">
+        Pódio dos Brancos
+      </h2>
 
       <div id="podio-brancos" class="podium">
         <div class="loading">A carregar resultados dos brancos...</div>
@@ -374,7 +49,9 @@
     </section>
 
     <section class="section" aria-labelledby="titulo-tintos">
-      <h2 id="titulo-tintos" class="sectionTitle">Pódio dos Tintos</h2>
+      <h2 id="titulo-tintos" class="sectionTitle centered">
+        Pódio dos Tintos
+      </h2>
 
       <div id="podio-tintos" class="podium">
         <div class="loading">A carregar resultados dos tintos...</div>
@@ -382,7 +59,9 @@
     </section>
 
     <section class="section" aria-labelledby="titulo-provadores">
-      <h2 id="titulo-provadores" class="sectionTitle">Pódio dos Provadores</h2>
+      <h2 id="titulo-provadores" class="sectionTitle centered">
+        Pódio dos Provadores
+      </h2>
 
       <div id="podio-provadores" class="podium">
         <div class="loading">A carregar resultados dos provadores...</div>
@@ -391,7 +70,9 @@
 
     <section class="notice">
       <strong>🍷 Obrigado pela participação</strong>
-      <p id="data-atualizacao">Resultados atualizados a partir da classificação final.</p>
+      <p id="data-atualizacao">
+        Resultados atualizados a partir da classificação final.
+      </p>
     </section>
   </main>
 
@@ -426,8 +107,8 @@
       return `
         <article class="podiumCard${classeSegundo}">
           <div class="medal">${medalha(indice)}</div>
-          <div class="position">${indice + 1}.º lugar</div>
-          <h3>${escapeHtml(vinho.nome)}</h3>
+          <div class="podiumPosition">${indice + 1}.º lugar</div>
+          <h3 class="podiumName">${escapeHtml(vinho.nome)}</h3>
           <div class="score">${formatPoints(vinho.pontos)} pts</div>
           <p class="podiumInfo">
             ${escapeHtml(vinho.regiao)} · ${escapeHtml(vinho.tipo)}
@@ -442,8 +123,8 @@
       return `
         <article class="podiumCard${classeSegundo}">
           <div class="medal">${medalha(indice)}</div>
-          <div class="position">${indice + 1}.º lugar</div>
-          <h3>${escapeHtml(provador.nome)}</h3>
+          <div class="podiumPosition">${indice + 1}.º lugar</div>
+          <h3 class="podiumName">${escapeHtml(provador.nome)}</h3>
           <div class="score">${formatPoints(provador.total)} pts</div>
           <p class="podiumInfo">
             Região: ${formatPoints(provador.regioes)} ·
@@ -513,6 +194,8 @@
           "pontos"
         );
 
+        const classificacaoProvadores = ordenarPorPontos(provadores, "total");
+
         renderPodioVinhos(
           "podio-brancos",
           brancos,
@@ -525,7 +208,7 @@
           "Ainda não existem resultados de vinhos tintos."
         );
 
-        renderPodioProvadores(ordenarPorPontos(provadores, "total"));
+        renderPodioProvadores(classificacaoProvadores);
 
         const agora = new Intl.DateTimeFormat("pt-PT", {
           dateStyle: "long",
@@ -539,7 +222,8 @@
 
         const mensagem = `
           <div class="error">
-            Não foi possível carregar os resultados. Verifica se a Google Sheet está publicada.
+            Não foi possível carregar os resultados.
+            Verifica se a Google Sheet está publicada.
           </div>
         `;
 
