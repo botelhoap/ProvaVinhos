@@ -3,8 +3,8 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <meta name="description" content="Classificação da Prova de Vinhos.">
-  <title>Prova de Vinhos | Classificação</title>
+  <meta name="description" content="Classificação geral dos vinhos em competição.">
+  <title>Prova de Vinhos | Vinhos</title>
   <link rel="stylesheet" href="style.css">
 </head>
 
@@ -12,47 +12,69 @@
   <header>
     <div class="headerInner">
       <h1>Prova de Vinhos</h1>
-      <p>Classificação dos vinhos provados</p>
+      <p>Classificação geral dos vinhos em competição</p>
     </div>
   </header>
 
   <nav aria-label="Navegação principal">
     <div class="navInner">
-      <a class="active" href="index.html">Vinhos</a>
+      <a href="index.html">Teaser</a>
+      <a class="active" href="vinhos.html">Vinhos</a>
       <a href="provadores.html">Provadores</a>
-       <a href="resultados.html">Resultados Finais</a>
+      <a href="resultados.html">Resultados Finais</a>
     </div>
   </nav>
 
   <main>
     <h2 class="sectionTitle">Classificação dos Vinhos</h2>
 
-    <div class="filters" aria-label="Filtrar por tipo de vinho">
-      <button class="filter active" type="button" data-filter="todos">Todos</button>
-      <button class="filter" type="button" data-filter="branco">Brancos</button>
-      <button class="filter" type="button" data-filter="tinto">Tintos</button>
+    <div class="filters" aria-label="Filtrar vinhos por tipo">
+      <button
+        class="filter active"
+        type="button"
+        onclick="filtrarVinhos('Todos', this)"
+      >
+        Todos
+      </button>
+
+      <button
+        class="filter"
+        type="button"
+        onclick="filtrarVinhos('Branco', this)"
+      >
+        Brancos
+      </button>
+
+      <button
+        class="filter"
+        type="button"
+        onclick="filtrarVinhos('Tinto', this)"
+      >
+        Tintos
+      </button>
     </div>
 
-    <section id="podio" class="podium" aria-label="Pódio dos vinhos">
-      <div class="loading">A carregar classificação...</div>
+    <section id="podium-container" class="podium" aria-label="Pódio dos vinhos">
+      <div class="loading">A carregar resultados...</div>
     </section>
 
     <section class="tableWrap" aria-label="Tabela de classificação dos vinhos">
       <table>
         <thead>
           <tr>
-            <th>Pos.</th>
+            <th style="width: 60px;">Pos.</th>
             <th>Vinho</th>
             <th>Tipo</th>
-            <th>Região</th>
-            <th>Preço</th>
-            <th>Votos</th>
-            <th>Pontos</th>
+            <th>Produtor / Região</th>
+            <th style="width: 100px; text-align: right;">Pontos</th>
           </tr>
         </thead>
+
         <tbody id="tabela-vinhos">
           <tr>
-            <td colspan="7" class="loading">A carregar dados...</td>
+            <td colspan="5" class="loading">
+              A carregar resultados do Google Sheets...
+            </td>
           </tr>
         </tbody>
       </table>
@@ -69,144 +91,112 @@
 
   <script>
     let todosOsVinhos = [];
-    let filtroAtivo = "todos";
 
-    function medalha(posicao) {
-      const medalhas = ["🥇", "🥈", "🥉"];
-      return medalhas[posicao] || "🍷";
-    }
-
-    function obterVinhosFiltrados() {
-      return todosOsVinhos
-        .filter((vinho) => {
-          if (filtroAtivo === "todos") {
-            return true;
-          }
-
-          return vinho.tipo.toLowerCase() === filtroAtivo;
-        })
-        .sort((a, b) => {
-          if (b.pontos !== a.pontos) {
-            return b.pontos - a.pontos;
-          }
-
-          if (b.votos !== a.votos) {
-            return b.votos - a.votos;
-          }
-
-          return a.nome.localeCompare(b.nome, "pt-PT");
-        });
-    }
-
-    function renderPodio(vinhos) {
-      const podio = document.getElementById("podio");
-
-      if (vinhos.length === 0) {
-        podio.innerHTML = `
-          <div class="error">
-            Não existem vinhos disponíveis para este filtro.
-          </div>
-        `;
-        return;
-      }
-
-      podio.innerHTML = vinhos
-        .slice(0, 3)
-        .map((vinho, indice) => `
-          <article class="podiumCard">
-            <div class="medal">${medalha(indice)}</div>
-            <div class="podiumPosition">${indice + 1}.º lugar</div>
-            <h3 class="podiumName">${escapeHtml(vinho.nome)}</h3>
-            <div class="score">${formatPoints(vinho.pontos)} pts</div>
-            <p class="podiumInfo">
-              ${escapeHtml(vinho.tipo)} · ${escapeHtml(vinho.regiao || "Região não indicada")}
-            </p>
-          </article>
-        `)
-        .join("");
-    }
-
-    function renderTabela(vinhos) {
-      const tabela = document.getElementById("tabela-vinhos");
-
-      if (vinhos.length === 0) {
-        tabela.innerHTML = `
-          <tr>
-            <td colspan="7" class="error">
-              Não existem vinhos disponíveis para este filtro.
-            </td>
-          </tr>
-        `;
-        return;
-      }
-
-      tabela.innerHTML = vinhos
-        .map((vinho, indice) => `
-          <tr>
-            <td class="rank">${indice + 1}.º</td>
-            <td>
-              <strong>${escapeHtml(vinho.nome)}</strong>
-              <span class="wineNumber">Vinho n.º ${formatPoints(vinho.numero)}</span>
-            </td>
-            <td><span class="type">${escapeHtml(vinho.tipo)}</span></td>
-            <td>${escapeHtml(vinho.regiao || "—")}</td>
-            <td>${escapeHtml(vinho.preco || "—")}</td>
-            <td>${formatPoints(vinho.votos)}</td>
-            <td class="points">${formatPoints(vinho.pontos)}</td>
-          </tr>
-        `)
-        .join("");
-    }
-
-    function atualizarPagina() {
-      const vinhos = obterVinhosFiltrados();
-      renderPodio(vinhos);
-      renderTabela(vinhos);
-    }
-
-    async function inicializarClassificacao() {
+    async function inicializar() {
       try {
-        const dados = await getSheetData();
+        const listas = await getSheetData();
 
-        todosOsVinhos = dados.vinhos;
+        todosOsVinhos = listas.vinhos
+          .map((item) => ({
+            nome: item.nome,
+            tipo: item.tipo || "N/A",
+            origem: item.regiao,
+            pontos: numberValue(item.pontos)
+          }))
+          .sort((a, b) => b.pontos - a.pontos);
 
-        if (todosOsVinhos.length === 0) {
-          throw new Error("Não foram encontrados vinhos na folha Vencedores.");
-        }
-
-        atualizarPagina();
+        renderizarVinhos(todosOsVinhos);
       } catch (erro) {
         console.error(erro);
 
-        document.getElementById("podio").innerHTML = `
+        document.getElementById("podium-container").innerHTML = `
           <div class="error">
-            Erro ao carregar a classificação: ${escapeHtml(erro.message)}
+            Não foi possível carregar o pódio.
           </div>
         `;
 
         document.getElementById("tabela-vinhos").innerHTML = `
           <tr>
-            <td colspan="7" class="error">
-              Verifica a publicação da Google Sheet e volta a tentar.
+            <td colspan="5" class="error">
+              Erro ao carregar dados: ${escapeHtml(erro.message)}
             </td>
           </tr>
         `;
       }
     }
 
-    document.querySelectorAll(".filter").forEach((botao) => {
-      botao.addEventListener("click", () => {
-        document.querySelectorAll(".filter").forEach((item) => {
-          item.classList.remove("active");
-        });
+    function renderizarVinhos(vinhos) {
+      const podiumContainer = document.getElementById("podium-container");
+      const tabelaBody = document.getElementById("tabela-vinhos");
 
-        botao.classList.add("active");
-        filtroAtivo = botao.dataset.filter;
-        atualizarPagina();
+      podiumContainer.innerHTML = "";
+      tabelaBody.innerHTML = "";
+
+      if (vinhos.length === 0) {
+        podiumContainer.innerHTML = `
+          <div class="loading">Nenhum vinho encontrado.</div>
+        `;
+
+        tabelaBody.innerHTML = `
+          <tr>
+            <td colspan="5" class="loading">Nenhum vinho encontrado.</td>
+          </tr>
+        `;
+
+        return;
+      }
+
+      const top3 = vinhos.slice(0, 3);
+      const medalhas = ["🥇", "🥈", "🥉"];
+
+      top3.forEach((item, indice) => {
+        podiumContainer.innerHTML += `
+          <article class="podiumCard">
+            <div class="medal">${medalhas[indice]}</div>
+            <div class="podiumPosition">${indice + 1}.º lugar</div>
+            <div class="podiumName">${escapeHtml(item.nome)}</div>
+            <div class="score">${formatPoints(item.pontos)} pts</div>
+            <div class="type">${escapeHtml(item.tipo)}</div>
+            <p class="podiumInfo">${escapeHtml(item.origem)}</p>
+          </article>
+        `;
       });
-    });
 
-    window.addEventListener("DOMContentLoaded", inicializarClassificacao);
+      vinhos.forEach((vinho, indice) => {
+        tabelaBody.innerHTML += `
+          <tr>
+            <td class="rank">${indice + 1}.º</td>
+            <td><strong>${escapeHtml(vinho.nome)}</strong></td>
+            <td class="type">${escapeHtml(vinho.tipo)}</td>
+            <td>${escapeHtml(vinho.origem)}</td>
+            <td class="points" style="text-align: right;">
+              ${formatPoints(vinho.pontos)}
+            </td>
+          </tr>
+        `;
+      });
+    }
+
+    function filtrarVinhos(tipo, botao) {
+      document.querySelectorAll(".filter").forEach((item) => {
+        item.classList.remove("active");
+      });
+
+      botao.classList.add("active");
+
+      if (tipo === "Todos") {
+        renderizarVinhos(todosOsVinhos);
+        return;
+      }
+
+      const filtrados = todosOsVinhos.filter((vinho) =>
+        String(vinho.tipo).toLowerCase().includes(tipo.toLowerCase())
+      );
+
+      renderizarVinhos(filtrados);
+    }
+
+    window.addEventListener("DOMContentLoaded", inicializar);
   </script>
 </body>
 </html>
