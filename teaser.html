@@ -3,21 +3,91 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <meta
-    name="description"
-    content="Prova de Vinhos — os resultados serão revelados em breve."
-  >
-  <title>Prova de Vinhos | Em breve</title>
-  <link rel="stylesheet" href="style.css">
+  <meta name="description" content="Prova de Vinhos — resultados em breve.">
+  <title>Prova de Vinhos | Resultados em breve</title>
 
   <style>
-    .teaserIntro {
-      max-width: 760px;
-      margin: 0 auto 34px;
+    :root {
+      --bg: #f4f1ea;
+      --card: #fffdf8;
+      --ink: #20251f;
+      --muted: #6e756c;
+      --wine: #6f1d35;
+      --gold: #d0aa59;
+      --line: #ddd7cc;
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
+    body {
+      margin: 0;
+      background: var(--bg);
+      color: var(--ink);
+      font-family: Arial, Helvetica, sans-serif;
+    }
+
+    header {
+      display: flex;
+      align-items: flex-start;
+      min-height: 280px;
+      padding: 22px 20px 34px;
+      background-color: var(--wine);
+      background-image:
+        linear-gradient(
+          90deg,
+          rgba(43, 7, 17, 0.66) 0%,
+          rgba(66, 11, 26, 0.42) 48%,
+          rgba(48, 7, 16, 0.24) 100%
+        ),
+        url("assets/images/5_edicao_Cabecalho.png");
+      background-position: center 35%;
+      background-repeat: no-repeat;
+      background-size: cover;
+    }
+
+    .container {
+      width: min(1120px, 100%);
+      margin: 0 auto;
+    }
+
+    .headerInner {
+      width: min(1120px, 100%);
+      margin: 0 auto;
       text-align: center;
     }
 
-    .teaserEyebrow {
+    header h1 {
+      margin: 0;
+      color: #ffffff;
+      font-family: Georgia, "Times New Roman", serif;
+      font-size: clamp(32px, 5vw, 54px);
+      font-weight: 700;
+      line-height: 1.08;
+      text-shadow: 0 2px 12px rgba(0, 0, 0, 0.78);
+    }
+
+    header p {
+      margin: 10px 0 0;
+      color: #ffffff;
+      font-size: 16px;
+      text-shadow: 0 2px 12px rgba(0, 0, 0, 0.78);
+    }
+
+    main {
+      width: min(1120px, 100%);
+      margin: 0 auto;
+      padding: 38px 20px 50px;
+    }
+
+    .intro {
+      max-width: 760px;
+      margin: 0 auto 38px;
+      text-align: center;
+    }
+
+    .eyebrow {
       margin: 0 0 8px;
       color: var(--wine);
       font-size: 13px;
@@ -26,159 +96,286 @@
       text-transform: uppercase;
     }
 
-    .teaserIntro h2 {
+    .intro h2 {
       margin: 0;
       font-family: Georgia, "Times New Roman", serif;
       font-size: clamp(28px, 5vw, 44px);
       line-height: 1.12;
     }
 
-    .teaserIntro p:last-child {
+    .intro p:last-child {
       margin: 12px 0 0;
       color: var(--muted);
       font-size: 16px;
       line-height: 1.5;
     }
 
-    .teaserSection {
-      margin-top: 38px;
+    .section {
+      margin-top: 42px;
     }
 
-    .teaserSectionTitle {
+    .sectionTitle {
       display: flex;
       align-items: center;
       justify-content: center;
       gap: 10px;
-      margin: 0 0 16px;
+      margin: 0 0 18px;
       color: var(--wine);
       font-family: Georgia, "Times New Roman", serif;
-      font-size: clamp(22px, 4vw, 30px);
+      font-size: clamp(23px, 4vw, 31px);
       text-align: center;
     }
 
-    .teaserSectionTitle::before,
-    .teaserSectionTitle::after {
+    .sectionTitle::before,
+    .sectionTitle::after {
       width: min(16vw, 120px);
       height: 1px;
       background: var(--gold);
       content: "";
     }
 
-    .teaserPodium {
-      margin-bottom: 0;
+    .podium {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 14px;
     }
 
-    .teaserPodium .podiumCard {
+    .podiumCard {
       position: relative;
-      min-height: 205px;
+      min-height: 210px;
       overflow: hidden;
+      padding: 22px 18px;
+      border: 1px solid var(--line);
+      border-radius: 12px;
+      background: var(--card);
+      box-shadow: 0 4px 14px rgba(32, 37, 31, 0.06);
+      text-align: center;
     }
 
-    .teaserPodium .podiumCard::after {
-      position: absolute;
-      right: -20px;
-      bottom: -30px;
-      color: rgba(111, 29, 53, 0.06);
-      font-family: Georgia, "Times New Roman", serif;
-      font-size: 120px;
-      font-weight: 700;
-      line-height: 1;
-      content: "🍷";
-      pointer-events: none;
-    }
-
-    .teaserPodium .podiumCard > * {
-      position: relative;
-      z-index: 1;
-    }
-
-    .teaserPodium .podiumCard:nth-child(2) {
+    .podiumCard.second {
       border-color: var(--gold);
       box-shadow: 0 8px 22px rgba(176, 138, 62, 0.18);
       transform: translateY(-8px);
     }
 
-    .teaserPodium .podiumName {
-      min-height: 50px;
+    .medal {
+      font-size: 34px;
+      line-height: 1;
     }
 
-    .teaserScore {
+    .position {
+      margin-top: 9px;
+      color: var(--gold);
+      font-size: 12px;
+      font-weight: 800;
+      letter-spacing: 0.06em;
+      text-transform: uppercase;
+    }
+
+    .podiumCard h3 {
+      min-height: 52px;
+      margin: 9px 0;
+      font-family: Georgia, "Times New Roman", serif;
+      font-size: 20px;
+      line-height: 1.25;
+    }
+
+    .podiumCard p {
+      margin: 0;
       color: var(--muted);
       font-size: 13px;
       font-weight: 700;
     }
 
-    .teaserReveal {
-      margin: 38px auto 0;
+    .notice {
+      margin: 42px auto 0;
       padding: 22px;
       border: 1px dashed var(--gold);
       border-radius: 12px;
-      background: rgba(255, 253, 248, 0.72);
+      background: rgba(255, 253, 248, 0.75);
       text-align: center;
     }
 
-    .teaserReveal strong {
+    .notice strong {
       display: block;
       color: var(--wine);
       font-family: Georgia, "Times New Roman", serif;
       font-size: 22px;
     }
 
-    .teaserReveal p {
+    .notice p {
       margin: 8px 0 0;
       color: var(--muted);
       font-size: 14px;
     }
 
+    footer {
+      width: min(1120px, 100%);
+      margin: 0 auto;
+      padding: 0 20px 30px;
+      color: var(--muted);
+      font-size: 12px;
+      text-align: center;
+    }
+
     @media (max-width: 720px) {
-      .teaserIntro {
+      header {
+        align-items: flex-end;
+        min-height: 165px;
+        padding: 16px 16px 14px;
+        background-position: center 35%;
+      }
+
+      header h1 {
+        font-size: clamp(21px, 6.5vw, 28px);
+        line-height: 1.05;
+      }
+
+      header p {
+        margin-top: 4px;
+        font-size: 11px;
+      }
+
+      main {
+        padding: 28px 14px 40px;
+      }
+
+      .intro {
         margin-bottom: 28px;
       }
 
-      .teaserIntro p:last-child {
+      .intro p:last-child {
         font-size: 14px;
       }
 
-      .teaserSection {
-        margin-top: 30px;
+      .section {
+        margin-top: 32px;
       }
 
-      .teaserPodium .podiumCard:nth-child(2) {
+      .podium {
+        grid-template-columns: 1fr;
+      }
+
+      .podiumCard,
+      .podiumCard.second {
+        min-height: auto;
         transform: none;
       }
 
-      .teaserPodium .podiumCard {
-        min-height: auto;
-      }
-
-      .teaserPodium .podiumName {
+      .podiumCard h3 {
         min-height: auto;
       }
     }
+  </style>
+</head>
 
-    @media (prefers-reduced-motion: no-preference) {
-      .teaserPodium .podiumCard {
-        animation: teaserEntrada 0.55s ease both;
-      }
+<body>
+  <header>
+    <div class="headerInner">
+      <h1>Prova de Vinhos</h1>
+      <p>5.ª Edição do Team Building</p>
+    </div>
+  </header>
 
-      .teaserPodium .podiumCard:nth-child(2) {
-        animation-delay: 0.12s;
-      }
+  <main>
+    <section class="intro">
+      <p class="eyebrow">Resultados em preparação</p>
+      <h2>Quem terá conquistado o pódio?</h2>
+      <p>
+        Os resultados oficiais continuam sob sigilo.
+        Entretanto, fica com uma antevisão totalmente séria e rigorosa.
+      </p>
+    </section>
 
-      .teaserPodium .podiumCard:nth-child(3) {
-        animation-delay: 0.24s;
-      }
+    <section class="section">
+      <h2 class="sectionTitle">Pódio dos Brancos</h2>
 
-      @keyframes teaserEntrada {
-        from {
-          opacity: 0;
-          transform: translateY(12px);
-        }
+      <div class="podium">
+        <article class="podiumCard">
+          <div class="medal">🥇</div>
+          <div class="position">1.º lugar</div>
+          <h3>Casal da Eira Premium 1999</h3>
+          <p>Pontuação classificada</p>
+        </article>
 
-        to {
-          opacity: 1;
-          transform: translateY(0);
-        }
-      }
+        <article class="podiumCard second">
+          <div class="medal">🥈</div>
+          <div class="position">2.º lugar</div>
+          <h3>Continente Reserva dos Sócios 1999</h3>
+          <p>Pontuação classificada</p>
+        </article>
 
-      .teaserPodium .podiumCard:nth-child(2) {
+        <article class="podiumCard">
+          <div class="medal">🥉</div>
+          <div class="position">3.º lugar</div>
+          <h3>Pingo Doce Uvas do Lidl 1999</h3>
+          <p>Pontuação classificada</p>
+        </article>
+      </div>
+    </section>
+
+    <section class="section">
+      <h2 class="sectionTitle">Pódio dos Tintos</h2>
+
+      <div class="podium">
+        <article class="podiumCard">
+          <div class="medal">🥇</div>
+          <div class="position">1.º lugar</div>
+          <h3>Pingo Doce Uvas do Lidl 1999</h3>
+          <p>Pontuação classificada</p>
+        </article>
+
+        <article class="podiumCard second">
+          <div class="medal">🥈</div>
+          <div class="position">2.º lugar</div>
+          <h3>Continente Reserva dos Sócios 1999</h3>
+          <p>Pontuação classificada</p>
+        </article>
+
+        <article class="podiumCard">
+          <div class="medal">🥉</div>
+          <div class="position">3.º lugar</div>
+          <h3>Casal da Eira Premium 1999</h3>
+          <p>Pontuação classificada</p>
+        </article>
+      </div>
+    </section>
+
+    <section class="section">
+      <h2 class="sectionTitle">Pódio dos Provadores</h2>
+
+      <div class="podium">
+        <article class="podiumCard">
+          <div class="medal">🥇</div>
+          <div class="position">1.º lugar</div>
+          <h3>Jacinto, Branco ou Tinto</h3>
+          <p>Palato de campeão</p>
+        </article>
+
+        <article class="podiumCard second">
+          <div class="medal">🥈</div>
+          <div class="position">2.º lugar</div>
+          <h3>Evaristo, não tens de outro vai disto</h3>
+          <p>Especialista em alternativas</p>
+        </article>
+
+        <article class="podiumCard">
+          <div class="medal">🥉</div>
+          <div class="position">3.º lugar</div>
+          <h3>Raimundo, bebeu o 1.º e o 2.º</h3>
+          <p>Classificação sob análise</p>
+        </article>
+      </div>
+    </section>
+
+    <section class="notice">
+      <strong>🍷 Resultados oficiais em breve</strong>
+      <p>A identidade dos vinhos e dos grandes vencedores será revelada no momento certo.</p>
+    </section>
+  </main>
+
+  <footer>
+    5.ª Edição do Team Building · Prova de Vinhos
+  </footer>
+</body>
+</html>
